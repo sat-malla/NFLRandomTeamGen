@@ -1,16 +1,32 @@
-import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image, Alert } from "react-native";
 import SwitchWithIcons from "react-native-switch-with-icons";
 import { Text } from "@rneui/base";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useTheme } from "../DarkTheme/ThemeProvider.js";
 import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
+import { getHelloWorld } from "../scripts/apiHandler.js";
 
 const Home = ({ navigation }) => {
   const { dark, colors, setScheme } = useTheme();
+  const [message, setMessage] = useState('');
 
   const toggleTheme = () => {
     dark ? setScheme("light") : setScheme("dark");
   };
+
+  const getMessage = async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/')
+        const json = await response.json();
+        setMessage(json.message)
+    } catch (error) {
+        Alert.alert(error)
+    }
+  }
+
+  useEffect(() => {
+    getMessage();
+  }, [])
 
   const lightModeIcon = (
     <Image
@@ -33,6 +49,7 @@ const Home = ({ navigation }) => {
           justifyContent: "flex-end",
           marginRight: 22,
           marginLeft: -8,
+          marginBottom: 2
         }}
       >
         <TouchableOpacity
@@ -126,6 +143,7 @@ const Home = ({ navigation }) => {
           Generate
         </Text>
       </TouchableOpacity>
+      <Text style={{ marginTop: 20 }}>{message}</Text>
     </View>
   );
 };

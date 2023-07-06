@@ -1,4 +1,11 @@
 import random
+from flask import Flask
+from flask_restful import Resource, Api
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app) # Enabling CORS for all routes
+api = Api(app)
 
 nflCities = [
     "Buffalo", "Miami", "New England", "New York", "Baltimore", "Cincinnati",
@@ -689,3 +696,11 @@ rateAdding = randomNflStartQb[1] + randomNflBackupQb[1] + randomNflRb[
                                         1] + randomNflPs[1] + randomNflRss[
                                             1] + randomNflLss[1]
 
+class HelloWorld(Resource):
+    def get(self):
+        return {'message': 'Hello Guys'}
+    
+api.add_resource(HelloWorld, '/')
+
+if __name__ == '__main__':
+    app.run(debug=True)
