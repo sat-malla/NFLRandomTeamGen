@@ -13,12 +13,11 @@ import { Text } from "@rneui/base";
 import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
 import { useTheme } from "../DarkTheme/ThemeProvider.js";
 import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
-import { getHelloWorld } from "../scripts/apiHandler.js";
-import axios from "axios";
 
 const Home = ({ navigation }) => {
   const { dark, colors, setScheme } = useTheme();
   const [data, setData] = useState([]);
+  const [schedule, setSchedule] = useState([]);
   const [buttonPressed, isButtonPressed] = useState(false);
 
   const toggleTheme = () => {
@@ -30,6 +29,8 @@ const Home = ({ navigation }) => {
       const response = await fetch("http://127.0.0.1:5000/");
       const json = await response.json();
       setData(json.teamItems);
+      setSchedule(json.schedule);
+      isButtonPressed(true);
     } catch (error) {
       Alert.alert(error);
     }
@@ -140,7 +141,7 @@ const Home = ({ navigation }) => {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onPress={() => isButtonPressed(true)}
+        onPress={getMessage}
       >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
           Generate
@@ -154,19 +155,33 @@ const Home = ({ navigation }) => {
         onPress={() => isButtonPressed(false)}
       />
       {buttonPressed ? (
-        <FlatList
-          data={data}
-          keyExtractor={({ id }) => id}
-          scrollEnabled={false}
-          style={{ marginTop: 10, padding: 15 }}
-          contentContainerStyle={{ alignItems: "center" }}
-          ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
-          renderItem={({ item }) => (
-            <Text style={{ fontSize: 15, color: colors.text }}>
-              {item.item}
-            </Text>
-          )}
-        />
+        <View style={{ marginTop: 10, padding: 15 }} >
+          <FlatList
+            data={data}
+            keyExtractor={({ id }) => id}
+            scrollEnabled={false}
+            contentContainerStyle={{ alignItems: "center" }}
+            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+            renderItem={({ item }) => (
+              <Text style={{ fontSize: 15, color: colors.text }}>
+                {item.item}
+              </Text>
+            )}
+          />
+          <FlatList
+            data={schedule}
+            keyExtractor={({ id }) => id}
+            scrollEnabled={false}
+            style={{ marginTop: 10 }}
+            contentContainerStyle={{ alignItems: "center" }}
+            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+            renderItem={({ item }) => (
+              <Text style={{ fontSize: 10, color: colors.text }}>
+                {item.item}
+              </Text>
+            )}
+          />
+        </View>
       ) : (
         <Text> </Text>
       )}

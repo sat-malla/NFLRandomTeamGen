@@ -1,4 +1,5 @@
 import random
+import json
 from flask import Flask
 from flask_restful import Resource, Api
 from flask_cors import CORS
@@ -40,6 +41,14 @@ nflTeamColors = [
     "Red, White, and Blue", "Orange, Black, and Silver",
     "Red, Black, and Yellow", "Orange, White, and Green", "Red and Blue",
     "Lime Green, White, and Black", "Light Blue, Navy Blue, and Turquoise"
+]
+
+#NFL Team Abbreviations
+nflAbbs = [
+    "BUF", "MIA", "NE", "NYJ", "BAL", "CIN", "CLE", "PIT", 
+    "HOU", "IND", "JAX", "TEN", "DEN", "KC", "LV", "LAC", 
+    "DAL", "NYG", "PHI", "WAS", "CHI", "DET", "GB", "MIN", 
+    "ATL", "CAR", "NO", "TB", "ARI", "LAR", "SF", "SEA"
 ]
 
 nflCoaches = [["Sean McDermott - BUF", 2], ["Mike McDaniel - MIA", 2],
@@ -566,202 +575,241 @@ nflLss = [["Reid Ferguson - BUF", 2], ["Blake Ferguson - MIA", 1],
           ["Joe Fortunato - ARI", 1], ["Alex Ward - LAR", 1],
           ["Taybor Pepper - SF", 1], ["Chris Toll - SEA", 1]]
 
-randomNflStartQb = random.choice(nflStartQbs)
-_randomNflStartQb = str(randomNflStartQb[0])
-
-randomNflBackupQb = random.choice(nflBackupQbs)
-_randomNflBackupQb = str(randomNflBackupQb[0])
-
-randomNflRb = random.choice(nflRbs)
-_randomNflRb = str(randomNflRb[0])
-
-randomNflRb2 = random.choice(nflRb2s)
-_randomNflRb2 = str(randomNflRb2[0])
-
-randomNflFb = random.choice(nflFbs)
-_randomNflFb = str(randomNflFb[0])
-
-randomNflWr1 = random.choice(nflWr1s)
-_randomNflWr1 = str(randomNflWr1[0])
-
-randomNflWr2 = random.choice(nflWr2s)
-_randomNflWr2 = str(randomNflWr2[0])
-
-randomNflWr3 = random.choice(nflWr3s)
-_randomNflWr3 = str(randomNflWr3[0])
-
-randomNflTe = random.choice(nflTes)
-_randomNflTe = str(randomNflTe[0])
-
-randomNflLts = random.choice(nflOts)
-_randomNflLts = str(randomNflLts[0])
-nflOts.remove(randomNflLts)
-
-randomNflLgs = random.choice(nflOgs)
-_randomNflLgs = str(randomNflLgs[0])
-nflOgs.remove(randomNflLgs)
-
-randomNflCs = random.choice(nflCs)
-_randomNflCs = str(randomNflCs[0])
-
-randomNflRgs = random.choice(nflOgs)
-_randomNflRgs = str(randomNflRgs[0])
-
-randomNflRts = random.choice(nflOts)
-_randomNflRts = str(randomNflRts[0])
-
-randomNflLDes = random.choice(nflDes)
-_randomNflLDes = str(randomNflLDes[0])
-nflDes.remove(randomNflLDes)
-
-randomNflLDts = random.choice(nflDts)
-_randomNflLDts = str(randomNflLDts[0])
-nflDts.remove(randomNflLDts)
-
-randomNflRDts = random.choice(nflDts)
-_randomNflRDts = str(randomNflRDts[0])
-
-randomNflRDes = random.choice(nflDes)
-_randomNflRDes = str(randomNflRDes[0])
-
-randomNflWLbs = random.choice(nflLbs)
-_randomNflWLbs = str(randomNflWLbs[0])
-nflLbs.remove(randomNflWLbs)
-
-randomNflMLbs = random.choice(nflLbs)
-_randomNflMLbs = str(randomNflMLbs[0])
-nflLbs.remove(randomNflMLbs)
-
-randomNflSLbs = random.choice(nflLbs)
-_randomNflSLbs = str(randomNflSLbs[0])
-
-randomNflCb1s = random.choice(nflCb1s)
-_randomNflCb1s = str(randomNflCb1s[0])
-
-randomNflCb2s = random.choice(nflCb2s)
-_randomNflCb2s = str(randomNflCb2s[0])
-
-randomNflSss = random.choice(nflSss)
-_randomNflSss = str(randomNflSss[0])
-
-randomNflFss = random.choice(nflFss)
-_randomNflFss = str(randomNflFss[0])
-
-randomNflNickels = random.choice(nflCb2s)
-_randomNflNickels = str(randomNflNickels[0])
-
-randomNflDimes = random.choice(nflFss)
-_randomNflDimes = str(randomNflDimes[0])
-
-randomNflKs = random.choice(nflKs)
-_randomNflKs = str(randomNflKs[0])
-
-randomNflPs = random.choice(nflPs)
-_randomNflPs = str(randomNflPs[0])
-
-randomNflRss = random.choice(nflRss)
-_randomNflRss = str(randomNflRss[0])
-
-randomNflLss = random.choice(nflLss)
-_randomNflLss = str(randomNflLss[0])
-
-randomNflCities = random.choice(nflCities)
-_randomNflCities = str(randomNflCities)
-
-randomNflTeamNames = random.choice(nflTeamNames)
-_randomNflTeamNames = str(randomNflTeamNames)
-
-randomNflTeamColors = random.choice(nflTeamColors)
-_randomNflTeamColors = str(randomNflTeamColors)
-
-randomNflCoaches = random.choice(nflCoaches)
-_randomNflCoaches = str(randomNflCoaches[0])
-
-randomNflMadeupCEOs = random.choice(nflMadeupCEOs)
-_randomNflMadeupCEOs = str(randomNflMadeupCEOs)
-
-randomNflMadeupCEOs1 = random.choice(nflMadeupCEOs)
-_randomNflMadeupCEOs1 = str(randomNflMadeupCEOs1)
-
-rateAdding = randomNflStartQb[1] + randomNflBackupQb[1] + randomNflRb[
-    1] + randomNflRb2[1] + randomNflFb[1] + randomNflWr1[1] + randomNflWr2[
-        1] + randomNflWr3[1] + randomNflTe[1] + randomNflLts[
-            1] + randomNflLgs[1] + randomNflCs[1] + randomNflRgs[
-                1] + randomNflRts[1] + randomNflLDes[1] + randomNflLDts[
-                    1] + randomNflRDts[1] + randomNflRDes[
-                        1] + randomNflWLbs[1] + randomNflMLbs[
-                            1] + randomNflSLbs[1] + randomNflCb1s[
-                                1] + randomNflCb2s[1] + randomNflSss[
-                                    1] + randomNflFss[1] + randomNflKs[
-                                        1] + randomNflPs[1] + randomNflRss[
-                                            1] + randomNflLss[1]
-
-teamResponse = ''
-
-
-# Rating adjustments
-if randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 1:
-    rateAdding -= 97
-    teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). Also, since your coach is bad, your rating decreases by 15."
-elif (randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 2):
-    rateAdding -= 82
-    teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below)."
-elif (randomNflStartQb[1] > 6 and rateAdding > 82 and randomNflCoaches[1] == 1):
-    rateAdding -= 87
-    teamResponse = "Since your coach is bad, your rating decreased by 15."
-elif randomNflStartQb[1] < 6 and rateAdding < 82 and randomNflCoaches[1] == 1:
-    rateAdding = 0
-    teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). And also since your coach is bad, your rating decreased by 15. But, since you have a really low rated team, your rating will be set to 0 instead of negative rating. Negative rating would just be too brutal, wouldn't it?"
-elif (randomNflCoaches[1] == 2 and rateAdding > 192):
-    rateAdding = 120
-    teamResponse = "Your coach is good, so your rating increases by 5. Your rating was higher than 120 because of the coach effect, but the rating should always 120 or lower because then it would be a bit unfair don't you think?"
-else:
-    rateAdding -= 72
-    teamResponse = "Your team has no effects."
-
-
 class TeamOutput(Resource):
     def get(self):
+        randomNflStartQb = random.choice(nflStartQbs)
+        _randomNflStartQb = str(randomNflStartQb[0])
+
+        randomNflBackupQb = random.choice(nflBackupQbs)
+        _randomNflBackupQb = str(randomNflBackupQb[0])
+
+        randomNflRb = random.choice(nflRbs)
+        _randomNflRb = str(randomNflRb[0])
+
+        randomNflRb2 = random.choice(nflRb2s)
+        _randomNflRb2 = str(randomNflRb2[0])
+
+        randomNflFb = random.choice(nflFbs)
+        _randomNflFb = str(randomNflFb[0])
+
+        randomNflWr1 = random.choice(nflWr1s)
+        _randomNflWr1 = str(randomNflWr1[0])
+
+        randomNflWr2 = random.choice(nflWr2s)
+        _randomNflWr2 = str(randomNflWr2[0])
+
+        randomNflWr3 = random.choice(nflWr3s)
+        _randomNflWr3 = str(randomNflWr3[0])
+
+        randomNflTe = random.choice(nflTes)
+        _randomNflTe = str(randomNflTe[0])
+
+        randomNflLts = random.choice(nflOts)
+        _randomNflLts = str(randomNflLts[0])
+        nflOts.remove(randomNflLts)
+
+        randomNflLgs = random.choice(nflOgs)
+        _randomNflLgs = str(randomNflLgs[0])
+        nflOgs.remove(randomNflLgs)
+
+        randomNflCs = random.choice(nflCs)
+        _randomNflCs = str(randomNflCs[0])
+
+        randomNflRgs = random.choice(nflOgs)
+        _randomNflRgs = str(randomNflRgs[0])
+
+        randomNflRts = random.choice(nflOts)
+        _randomNflRts = str(randomNflRts[0])
+
+        randomNflLDes = random.choice(nflDes)
+        _randomNflLDes = str(randomNflLDes[0])
+        nflDes.remove(randomNflLDes)
+
+        randomNflLDts = random.choice(nflDts)
+        _randomNflLDts = str(randomNflLDts[0])
+        nflDts.remove(randomNflLDts)
+
+        randomNflRDts = random.choice(nflDts)
+        _randomNflRDts = str(randomNflRDts[0])
+
+        randomNflRDes = random.choice(nflDes)
+        _randomNflRDes = str(randomNflRDes[0])
+
+        randomNflWLbs = random.choice(nflLbs)
+        _randomNflWLbs = str(randomNflWLbs[0])
+        nflLbs.remove(randomNflWLbs)
+
+        randomNflMLbs = random.choice(nflLbs)
+        _randomNflMLbs = str(randomNflMLbs[0])
+        nflLbs.remove(randomNflMLbs)
+
+        randomNflSLbs = random.choice(nflLbs)
+        _randomNflSLbs = str(randomNflSLbs[0])
+
+        randomNflCb1s = random.choice(nflCb1s)
+        _randomNflCb1s = str(randomNflCb1s[0])
+
+        randomNflCb2s = random.choice(nflCb2s)
+        _randomNflCb2s = str(randomNflCb2s[0])
+
+        randomNflSss = random.choice(nflSss)
+        _randomNflSss = str(randomNflSss[0])
+
+        randomNflFss = random.choice(nflFss)
+        _randomNflFss = str(randomNflFss[0])
+
+        randomNflNickels = random.choice(nflCb2s)
+        _randomNflNickels = str(randomNflNickels[0])
+
+        randomNflDimes = random.choice(nflFss)
+        _randomNflDimes = str(randomNflDimes[0])
+
+        randomNflKs = random.choice(nflKs)
+        _randomNflKs = str(randomNflKs[0])
+
+        randomNflPs = random.choice(nflPs)
+        _randomNflPs = str(randomNflPs[0])
+
+        randomNflRss = random.choice(nflRss)
+        _randomNflRss = str(randomNflRss[0])
+
+        randomNflLss = random.choice(nflLss)
+        _randomNflLss = str(randomNflLss[0])
+
+        randomNflCities = random.choice(nflCities)
+        _randomNflCities = str(randomNflCities)
+
+        randomNflTeamNames = random.choice(nflTeamNames)
+        _randomNflTeamNames = str(randomNflTeamNames)
+
+        randomNflTeamColors = random.choice(nflTeamColors)
+        _randomNflTeamColors = str(randomNflTeamColors)
+
+        randomNflCoaches = random.choice(nflCoaches)
+        _randomNflCoaches = str(randomNflCoaches[0])
+
+        randomNflMadeupCEOs = random.choice(nflMadeupCEOs)
+        _randomNflMadeupCEOs = str(randomNflMadeupCEOs)
+
+        randomNflMadeupCEOs1 = random.choice(nflMadeupCEOs)
+        _randomNflMadeupCEOs1 = str(randomNflMadeupCEOs1)
+
+        rateAdding = randomNflStartQb[1] + randomNflBackupQb[1] + randomNflRb[
+            1] + randomNflRb2[1] + randomNflFb[1] + randomNflWr1[1] + randomNflWr2[
+                1] + randomNflWr3[1] + randomNflTe[1] + randomNflLts[
+                    1] + randomNflLgs[1] + randomNflCs[1] + randomNflRgs[
+                        1] + randomNflRts[1] + randomNflLDes[1] + randomNflLDts[
+                            1] + randomNflRDts[1] + randomNflRDes[
+                                1] + randomNflWLbs[1] + randomNflMLbs[
+                                    1] + randomNflSLbs[1] + randomNflCb1s[
+                                        1] + randomNflCb2s[1] + randomNflSss[
+                                            1] + randomNflFss[1] + randomNflKs[
+                                                1] + randomNflPs[1] + randomNflRss[
+                                                    1] + randomNflLss[1]
+
+        nflTeams = [
+            "Buffalo Bills", "Miami Dolphins", "New England Patriots", "New York Jets",
+            "Baltimore Ravens", "Cincinnati Bengals", "Cleveland Browns", "Pittsburgh Steelers",
+            "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Tennessee Titans",
+            "Denver Broncos", "Kansas City Chiefs", "Las Vegas Raiders", "Los Angeles Chargers",
+            "Dallas Cowboys", "New York Giants", "Philadelphia Eagles", "Washington Commanders",
+            "Chicago Bears", "Detroit Lions", "Green Bay Packers", "Minnesota Vikings",
+            "Atlanta Falcons", "Carolina Panthers", "New Orleans Saints", "Tampa Bay Buccaneers",
+            "Arizona Cardinals", "Los Angeles Rams", "San Francisco 49ers", "Seattle Seahawks"
+        ]
+
+        teamResponse = ''
+        # Rating adjustments
+        if randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 1:
+            rateAdding -= 97
+            teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). Also, since your coach is bad, your rating decreases by 15."
+        elif (randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 2):
+            rateAdding -= 82
+            teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below)."
+        elif (randomNflStartQb[1] > 6 and rateAdding > 82 and randomNflCoaches[1] == 1):
+            rateAdding -= 87
+            teamResponse = "Since your coach is bad, your rating decreased by 15."
+        elif randomNflStartQb[1] < 6 and rateAdding < 82 and randomNflCoaches[1] == 1:
+            rateAdding = 0
+            teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). And also since your coach is bad, your rating decreased by 15. But, since you have a really low rated team, your rating will be set to 0 instead of negative rating. Negative rating would just be too brutal, wouldn't it?"
+        elif (randomNflCoaches[1] == 2 and rateAdding > 192):
+            rateAdding = 120
+            teamResponse = "Your coach is good, so your rating increases by 5. Your rating was higher than 120 because of the coach effect, but the rating should always 120 or lower because then it would be a bit unfair don't you think?"
+        else:
+            rateAdding -= 72
+            teamResponse = "Your team has no effects."
+
+        team = [_randomNflCoaches, _randomNflStartQb, _randomNflBackupQb, _randomNflRb, _randomNflRb2,
+                _randomNflWr1, _randomNflWr2, _randomNflWr3, _randomNflFb, _randomNflTe, _randomNflLts,
+                _randomNflLgs, _randomNflCs, _randomNflRgs, _randomNflRts, _randomNflLDes, _randomNflLDts,
+                _randomNflRDts, _randomNflRDes, _randomNflWLbs, _randomNflMLbs, _randomNflSLbs, _randomNflCb1s,
+                _randomNflCb2s, _randomNflSss, _randomNflFss, _randomNflNickels, _randomNflDimes, _randomNflKs,
+                _randomNflPs, _randomNflRss, _randomNflLss]
+        
+        #Generate randomly generated team's schedule
+        def generateSchedule():
+            for x in team:
+                _team = x[len(x)-2:]
+                if _team in nflAbbs:
+                    nflTeams.pop(nflAbbs.index(_team))
+            schedule = random.shuffle(nflTeams)
+            return schedule
+
+        def homeOrAway():
+            number = int(random.random())
+            if number % 2 == 0:
+                homeOrAway = "Vs: "
+            else:
+                homeOrAway = "At: "
+            return homeOrAway
+
+        scheduleDict = {"item": homeOrAway() + generateSchedule()}
+        scheduleDict_json = json.dumps(scheduleDict) # Schedule to json object
+
         return {
             'teamItems': [
                {'id': '1', 'item': "Team Name: " + _randomNflCities + " " + _randomNflTeamNames},
                {'id': '2', 'item': "Team CEO: " + _randomNflMadeupCEOs},
                {'id': '3', 'item': "Team GM: " + _randomNflMadeupCEOs1},
                {'id': '4', 'item': "Team Colors: " + _randomNflTeamColors},
-               {'id': '5', 'item': "QB1: " + _randomNflStartQb},
-               {'id': '6', 'item': "QB2: " + _randomNflBackupQb},
-               {'id': '7', 'item': "RB1: " + _randomNflRb},
-               {'id': '8', 'item': "RB2: " + _randomNflRb2},
-               {'id': '9', 'item': "FB: " + _randomNflFb},
-               {'id': '10', 'item': "WR1: " + _randomNflWr1},
-               {'id': '11', 'item': "WR2: " + _randomNflWr2},
-               {'id': '12', 'item': "WR3: " + _randomNflWr3},
-               {'id': '13', 'item': "TE: " + _randomNflTe},
-               {'id': '14', 'item': "LT: " + _randomNflLts},
-               {'id': '15', 'item': "LG: " + _randomNflLgs},
-               {'id': '16', 'item': "C: " + _randomNflCs},
-               {'id': '17', 'item': "RG: " + _randomNflRgs},
-               {'id': '18', 'item': "RT: " + _randomNflRts},
-               {'id': '19', "item": "LDE: " + _randomNflLDes},
-               {'id': '20', "item": "LDT: " + _randomNflLDts},
-               {'id': '21', "item": "RDT: " + _randomNflRDts},
-               {'id': '22', "item": "RDE: " + _randomNflRDes},
-               {'id': '23', "item": "WLB: " + _randomNflWLbs},
-               {'id': '24', "item": "MLB: " + _randomNflMLbs},
-               {'id': '25', "item": "SLB: " + _randomNflSLbs},
-               {'id': '26', "item": "CB1: " + _randomNflCb1s},
-               {'id': '27', "item": "CB2: " + _randomNflCb2s},
-               {'id': '28', "item": "SS: " + _randomNflSss},
-               {'id': '29', "item": "FS: " + _randomNflFss},
-               {'id': '30', "item": "Nickelback: " + _randomNflNickels},
-               {'id': '31', "item": "Dimeback: " + _randomNflDimes},
-               {'id': '32', "item": "K: " + _randomNflKs},
-               {'id': '33', "item": "P: " + _randomNflPs},
-               {'id': '34', "item": "RS: " + _randomNflRss},
-               {'id': '35', "item": "LS: " + _randomNflLss},
-               {'id': '36', "item": "Team Rating: " + str(rateAdding) + "/120"},
-               {'id': '37', "item": teamResponse}
+               {'id': '5', 'item': "Coach: " + _randomNflCoaches},
+               {'id': '6', 'item': "QB1: " + _randomNflStartQb},
+               {'id': '7', 'item': "QB2: " + _randomNflBackupQb},
+               {'id': '8', 'item': "RB1: " + _randomNflRb},
+               {'id': '9', 'item': "RB2: " + _randomNflRb2},
+               {'id': '10', 'item': "FB: " + _randomNflFb},
+               {'id': '11', 'item': "WR1: " + _randomNflWr1},
+               {'id': '12', 'item': "WR2: " + _randomNflWr2},
+               {'id': '13', 'item': "WR3: " + _randomNflWr3},
+               {'id': '14', 'item': "TE: " + _randomNflTe},
+               {'id': '15', 'item': "LT: " + _randomNflLts},
+               {'id': '16', 'item': "LG: " + _randomNflLgs},
+               {'id': '17', 'item': "C: " + _randomNflCs},
+               {'id': '18', 'item': "RG: " + _randomNflRgs},
+               {'id': '19', 'item': "RT: " + _randomNflRts},
+               {'id': '20', "item": "LDE: " + _randomNflLDes},
+               {'id': '21', "item": "LDT: " + _randomNflLDts},
+               {'id': '22', "item": "RDT: " + _randomNflRDts},
+               {'id': '23', "item": "RDE: " + _randomNflRDes},
+               {'id': '24', "item": "WLB: " + _randomNflWLbs},
+               {'id': '25', "item": "MLB: " + _randomNflMLbs},
+               {'id': '26', "item": "SLB: " + _randomNflSLbs},
+               {'id': '27', "item": "CB1: " + _randomNflCb1s},
+               {'id': '28', "item": "CB2: " + _randomNflCb2s},
+               {'id': '29', "item": "SS: " + _randomNflSss},
+               {'id': '30', "item": "FS: " + _randomNflFss},
+               {'id': '31', "item": "Nickelback: " + _randomNflNickels},
+               {'id': '32', "item": "Dimeback: " + _randomNflDimes},
+               {'id': '33', "item": "K: " + _randomNflKs},
+               {'id': '34', "item": "P: " + _randomNflPs},
+               {'id': '35', "item": "RS: " + _randomNflRss},
+               {'id': '36', "item": "LS: " + _randomNflLss},
+               {'id': '37', "item": "Team Rating: " + str(rateAdding) + "/120"},
+               {'id': '38', "item": teamResponse}
             ],
+            'schedule': [
+                scheduleDict_json
+            ]
         }
     
 api.add_resource(TeamOutput, '/')
