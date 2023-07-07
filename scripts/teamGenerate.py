@@ -103,11 +103,11 @@ nflBackupQbs = [["Kyle Allen - BUF", 3], ["Mike White - MIA", 5],
                 ["Cooper Rush - DAL", 7], ["Tyrod Taylor - NYG", 4],
                 ["Marcus Mariota - PHI", 4], ["Jacoby Brissett - WAS", 5],
                 ["PJ Walker - CHI", 4], ["Nate Sudfeld - DET", 3],
-                ["Jordan Love - GB", 4], ["Nick Mullens - MIN", 3],
-                ["Taylor Heinicke - ATL", 5], ["Matt Corral - CAR", 2],
+                ["Sean Clifford - GB", 2], ["Nick Mullens - MIN", 3],
+                ["Taylor Heinicke - ATL", 5], ["Andy Dalton - CAR", 4],
                 ["Jameis Winston - NO", 5], ["Kyle Trask - TB", 2],
-                ["Colt McCoy - ARI", 4], ["Trey Lance - SF", 5],
-                ["Drew Lock - SEA", 3]]
+                ["Colt McCoy - ARI", 4], ["Brett Rypien - LAR", 3],
+                ["Trey Lance - SF", 5], ["Drew Lock - SEA", 3]]
 
 nflRbs = [["James Cook - BUF", 6], ["Raheem Mostert - MIA", 7],
           ["Rhamondre Stevenson - NE", 7], ["Breece Hall - NYJ", 7],
@@ -696,11 +696,75 @@ rateAdding = randomNflStartQb[1] + randomNflBackupQb[1] + randomNflRb[
                                         1] + randomNflPs[1] + randomNflRss[
                                             1] + randomNflLss[1]
 
-class HelloWorld(Resource):
+teamResponse = ''
+
+
+# Rating adjustments
+if randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 1:
+    rateAdding -= 97
+    teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). Also, since your coach is bad, your rating decreases by 15."
+elif (randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 2):
+    rateAdding -= 82
+    teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below)."
+elif (randomNflStartQb[1] > 6 and rateAdding > 82 and randomNflCoaches[1] == 1):
+    rateAdding -= 87
+    teamResponse = "Since your coach is bad, your rating decreased by 15."
+elif randomNflStartQb[1] < 6 and rateAdding < 82 and randomNflCoaches[1] == 1:
+    rateAdding = 0
+    teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). And also since your coach is bad, your rating decreased by 15. But, since you have a really low rated team, your rating will be set to 0 instead of negative rating. Negative rating would just be too brutal, wouldn't it?"
+elif (randomNflCoaches[1] == 2 and rateAdding > 192):
+    rateAdding = 120
+    teamResponse = "Your coach is good, so your rating increases by 5. Your rating was higher than 120 because of the coach effect, but the rating should always 120 or lower because then it would be a bit unfair don't you think?"
+else:
+    rateAdding -= 72
+    teamResponse = "Your team has no effects."
+
+
+class TeamOutput(Resource):
     def get(self):
-        return {'message': 'Hello Guys'}
+        return {
+            'teamItems': [
+               {'id': '1', 'item': "Team Name: " + _randomNflCities + " " + _randomNflTeamNames},
+               {'id': '2', 'item': "Team CEO: " + _randomNflMadeupCEOs},
+               {'id': '3', 'item': "Team GM: " + _randomNflMadeupCEOs1},
+               {'id': '4', 'item': "Team Colors: " + _randomNflTeamColors},
+               {'id': '5', 'item': "QB1: " + _randomNflStartQb},
+               {'id': '6', 'item': "QB2: " + _randomNflBackupQb},
+               {'id': '7', 'item': "RB1: " + _randomNflRb},
+               {'id': '8', 'item': "RB2: " + _randomNflRb2},
+               {'id': '9', 'item': "FB: " + _randomNflFb},
+               {'id': '10', 'item': "WR1: " + _randomNflWr1},
+               {'id': '11', 'item': "WR2: " + _randomNflWr2},
+               {'id': '12', 'item': "WR3: " + _randomNflWr3},
+               {'id': '13', 'item': "TE: " + _randomNflTe},
+               {'id': '14', 'item': "LT: " + _randomNflLts},
+               {'id': '15', 'item': "LG: " + _randomNflLgs},
+               {'id': '16', 'item': "C: " + _randomNflCs},
+               {'id': '17', 'item': "RG: " + _randomNflRgs},
+               {'id': '18', 'item': "RT: " + _randomNflRts},
+               {'id': '19', "item": "LDE: " + _randomNflLDes},
+               {'id': '20', "item": "LDT: " + _randomNflLDts},
+               {'id': '21', "item": "RDT: " + _randomNflRDts},
+               {'id': '22', "item": "RDE: " + _randomNflRDes},
+               {'id': '23', "item": "WLB: " + _randomNflWLbs},
+               {'id': '24', "item": "MLB: " + _randomNflMLbs},
+               {'id': '25', "item": "SLB: " + _randomNflSLbs},
+               {'id': '26', "item": "CB1: " + _randomNflCb1s},
+               {'id': '27', "item": "CB2: " + _randomNflCb2s},
+               {'id': '28', "item": "SS: " + _randomNflSss},
+               {'id': '29', "item": "FS: " + _randomNflFss},
+               {'id': '30', "item": "Nickelback: " + _randomNflNickels},
+               {'id': '31', "item": "Dimeback: " + _randomNflDimes},
+               {'id': '32', "item": "K: " + _randomNflKs},
+               {'id': '33', "item": "P: " + _randomNflPs},
+               {'id': '34', "item": "RS: " + _randomNflRss},
+               {'id': '35', "item": "LS: " + _randomNflLss},
+               {'id': '36', "item": "Team Rating: " + str(rateAdding) + "/120"},
+               {'id': '37', "item": teamResponse}
+            ],
+        }
     
-api.add_resource(HelloWorld, '/')
+api.add_resource(TeamOutput, '/')
 
 if __name__ == '__main__':
     app.run(debug=True)

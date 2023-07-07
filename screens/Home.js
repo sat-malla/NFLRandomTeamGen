@@ -1,14 +1,25 @@
-import { StyleSheet, View, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+  FlatList,
+  Button,
+  ScrollView,
+} from "react-native";
 import SwitchWithIcons from "react-native-switch-with-icons";
 import { Text } from "@rneui/base";
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
 import { useTheme } from "../DarkTheme/ThemeProvider.js";
 import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
 import { getHelloWorld } from "../scripts/apiHandler.js";
+import axios from "axios";
 
 const Home = ({ navigation }) => {
   const { dark, colors, setScheme } = useTheme();
-  const [message, setMessage] = useState('');
+  const [data, setData] = useState([]);
+  const [buttonPressed, isButtonPressed] = useState(false);
 
   const toggleTheme = () => {
     dark ? setScheme("light") : setScheme("dark");
@@ -16,30 +27,17 @@ const Home = ({ navigation }) => {
 
   const getMessage = async () => {
     try {
-        const response = await fetch('http://127.0.0.1:5000/')
-        const json = await response.json();
-        setMessage(json.message)
+      const response = await fetch("http://127.0.0.1:5000/");
+      const json = await response.json();
+      setData(json.teamItems);
     } catch (error) {
-        Alert.alert(error)
+      Alert.alert(error);
     }
-  }
+  };
 
   useEffect(() => {
     getMessage();
-  }, [])
-
-  const lightModeIcon = (
-    <Image
-      source={{ uri: "Images/light-mode.png" }}
-      style={{ width: 20, height: 100 }}
-    />
-  );
-  const darkModeIcon = (
-    <Image
-      source={{ uri: "Images/night-mode.png" }}
-      style={{ width: 100, height: 100 }}
-    />
-  );
+  }, []);
 
   navigation.setOptions({
     headerLeft: () => (
@@ -49,7 +47,7 @@ const Home = ({ navigation }) => {
           justifyContent: "flex-end",
           marginRight: 22,
           marginLeft: -8,
-          marginBottom: 2
+          marginBottom: 2,
         }}
       >
         <TouchableOpacity
@@ -59,7 +57,7 @@ const Home = ({ navigation }) => {
             borderColor: "white",
             borderRadius: 8,
             padding: 5,
-            paddingHorizontal: 6
+            paddingHorizontal: 6,
           }}
         >
           {dark ? (
@@ -90,12 +88,15 @@ const Home = ({ navigation }) => {
   });
 
   return (
-    <View
+    <ScrollView
       style={{
-        alignItems: "center",
         height: "100%",
         backgroundColor: colors.primary,
       }}
+      contentContainerStyle={{
+        alignItems: "center",
+      }}
+      scrollIndicatorInsets={{ right: 1 }}
     >
       <Text
         style={{
@@ -131,20 +132,46 @@ const Home = ({ navigation }) => {
         style={{
           backgroundColor: "#1c5cff",
           padding: 10,
-          marginTop: 70,
+          marginTop: 40,
+          marginBottom: 10,
           width: "50%",
-          height: "5.5%",
+          height: 50, //buttonPressed ? "4%" : "14%",
           borderRadius: 10,
           alignItems: "center",
           justifyContent: "center",
         }}
+        onPress={() => isButtonPressed(true)}
       >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
           Generate
         </Text>
       </TouchableOpacity>
-      <Text style={{ marginTop: 20 }}>{message}</Text>
-    </View>
+      <Button
+        disabled={!buttonPressed}
+        title="Clear"
+        accessibilityLabel="Clear Generated Team"
+        color="red"
+        onPress={() => isButtonPressed(false)}
+      />
+      {buttonPressed ? (
+        <FlatList
+          data={data}
+          keyExtractor={({ id }) => id}
+          scrollEnabled={false}
+          style={{ marginTop: 10, padding: 15 }}
+          contentContainerStyle={{ alignItems: "center" }}
+          ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+          renderItem={({ item }) => (
+            <Text style={{ fontSize: 15, color: colors.text }}>
+              {item.item}
+            </Text>
+          )}
+        />
+      ) : (
+        <Text> </Text>
+      )}
+      <View style={{ height: 90 }} />
+    </ScrollView>
   );
 };
 
