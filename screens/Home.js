@@ -155,9 +155,32 @@ const Home = ({ navigation }) => {
         onPress={() => isButtonPressed(false)}
       />
       {buttonPressed ? (
-        <View style={{ marginTop: 10, padding: 15 }} >
+        <View style={{ marginTop: 10, padding: 15 }}>
           <FlatList
             data={data}
+            keyExtractor={({ id }) => id}
+            scrollEnabled={false}
+            style={{ marginBottom: -340 }}
+            contentContainerStyle={{ alignItems: "center" }}
+            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+            renderItem={({ item }) => (
+              <Text style={{ fontSize: 15, color: colors.text }}>
+                {item.item}
+              </Text>
+            )}
+          />
+          <Text
+            style={{
+              fontSize: 25,
+              fontWeight: "bold",
+              alignSelf: "center",
+              color: colors.text,
+            }}
+          >
+            Team Schedule:{" "}
+          </Text>
+          <FlatList
+            data={schedule}
             keyExtractor={({ id }) => id}
             scrollEnabled={false}
             contentContainerStyle={{ alignItems: "center" }}
@@ -168,24 +191,11 @@ const Home = ({ navigation }) => {
               </Text>
             )}
           />
-          <FlatList
-            data={schedule}
-            keyExtractor={({ id }) => id}
-            scrollEnabled={false}
-            style={{ marginTop: 10 }}
-            contentContainerStyle={{ alignItems: "center" }}
-            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
-            renderItem={({ item }) => (
-              <Text style={{ fontSize: 10, color: colors.text }}>
-                {item.item}
-              </Text>
-            )}
-          />
         </View>
       ) : (
         <Text> </Text>
       )}
-      <View style={{ height: 90 }} />
+      <View style={{ height: 410 }} />
     </ScrollView>
   );
 };

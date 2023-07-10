@@ -43,14 +43,6 @@ nflTeamColors = [
     "Lime Green, White, and Black", "Light Blue, Navy Blue, and Turquoise"
 ]
 
-#NFL Team Abbreviations
-nflAbbs = [
-    "BUF", "MIA", "NE", "NYJ", "BAL", "CIN", "CLE", "PIT", 
-    "HOU", "IND", "JAX", "TEN", "DEN", "KC", "LV", "LAC", 
-    "DAL", "NYG", "PHI", "WAS", "CHI", "DET", "GB", "MIN", 
-    "ATL", "CAR", "NO", "TB", "ARI", "LAR", "SF", "SEA"
-]
-
 nflCoaches = [["Sean McDermott - BUF", 2], ["Mike McDaniel - MIA", 2],
               ["Bill Belichick - NE", 2], ["Robert Saleh - NYJ", 1],
               ["John Harbaugh - BAL", 2], ["Zac Taylor - CIN", 2],
@@ -144,7 +136,7 @@ nflRb2s = [["Damein Harris - BUF", 6], ["Jeff Wilson Jr. - MIA", 5],
            ["Samaje Perine - DEN", 6], ["Clyde Edwards-Helaire - KC", 7],
            ["Zamir White - LV", 4], ["Joshua Kelley - LAC", 4],
            ["Malik Davis - DAL", 6], ["Matt Breida - NYG", 4],
-           ["Kenneth Gainwell - PHI", 7], ["Antonio Gibson - WAS", 7],
+           ["Rashaad Penny - PHI", 6], ["Antonio Gibson - WAS", 7],
            ["D'Onta Foreman - CHI", 6], ["Jahmyr Gibbs - DET", 5],
            ["A.J. Dillon - GB", 7], ["Ty Chandler - MIN", 4],
            ["Cordarrelle Patterson - ATL", 7], ["Chuba Hubbard - CAR", 6],
@@ -706,18 +698,6 @@ class TeamOutput(Resource):
                                             1] + randomNflFss[1] + randomNflKs[
                                                 1] + randomNflPs[1] + randomNflRss[
                                                     1] + randomNflLss[1]
-
-        nflTeams = [
-            "Buffalo Bills", "Miami Dolphins", "New England Patriots", "New York Jets",
-            "Baltimore Ravens", "Cincinnati Bengals", "Cleveland Browns", "Pittsburgh Steelers",
-            "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Tennessee Titans",
-            "Denver Broncos", "Kansas City Chiefs", "Las Vegas Raiders", "Los Angeles Chargers",
-            "Dallas Cowboys", "New York Giants", "Philadelphia Eagles", "Washington Commanders",
-            "Chicago Bears", "Detroit Lions", "Green Bay Packers", "Minnesota Vikings",
-            "Atlanta Falcons", "Carolina Panthers", "New Orleans Saints", "Tampa Bay Buccaneers",
-            "Arizona Cardinals", "Los Angeles Rams", "San Francisco 49ers", "Seattle Seahawks"
-        ]
-
         teamResponse = ''
         # Rating adjustments
         if randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 1:
@@ -746,25 +726,57 @@ class TeamOutput(Resource):
                 _randomNflCb2s, _randomNflSss, _randomNflFss, _randomNflNickels, _randomNflDimes, _randomNflKs,
                 _randomNflPs, _randomNflRss, _randomNflLss]
         
+
+        #NFL Team Abbreviations & Teams(primarily for generateSchedule())
+        nflTeams = [
+            ["BUF", "Buffalo Bills"], ["MIA", "Miami Dolphins"], ["NE", "New England Patriots"], ["NYJ", "New York Jets"],
+            ["BAL", "Baltimore Ravens"], ["CIN", "Cincinnati Bengals"], ["CLE", "Cleveland Browns"], ["PIT", "Pittsburgh Steelers"],
+            ["HOU", "Houston Texans"], ["IND", "Indianapolis Colts"], ["JAX", "Jacksonville Jaguars"], ["TEN", "Tennessee Titans"],
+            ["DEN", "Denver Broncos"], ["KC", "Kansas City Chiefs"], ["LV", "Las Vegas Raiders"], ["LAC", "Los Angeles Chargers"],
+            ["DAL", "Dallas Cowboys"], ["NYG", "New York Giants"], ["PHI", "Philadelphia Eagles"], ["WAS", "Washington Commanders"],
+            ["CHI", "Chicago Bears"], ["DET", "Detroit Lions"], ["GB", "Green Bay Packers"], ["MIN", "Minnesota Vikings"],
+            ["ATL", "Atlanta Falcons"], ["CAR", "Carolina Panthers"], ["NO", "New Orleans Saints"], ["TB", "Tampa Bay Buccaneers"],
+            ["ARI", "Arizona Cardinals"], ["LAR", "Los Angeles Rams"], ["SF", "San Francisco 49ers"], ["SEA", "Seattle Seahawks"]
+        ]
+
         #Generate randomly generated team's schedule
         def generateSchedule():
+            # for x in team:
+            #     _team = x.split()
+            #     index = _team[len(_team) - 1]
+            #     if index in list(list(zip(*nflTeams))[0]):
+            #         nflTeams.remove(nflTeams.index(list(list(zip(*nflTeams)))))
+            #         index -= 1
+            # schedule = random.shuffle(nflTeams)
+            # return schedule
             for x in team:
-                _team = x[len(x)-2:]
-                if _team in nflAbbs:
-                    nflTeams.pop(nflAbbs.index(_team))
-            schedule = random.shuffle(nflTeams)
-            return schedule
+                _team = x.split()
+                index = _team[len(_team) - 1]
+                for i in nflTeams:
+                    if index == i[0]:
+                        nflTeams.remove(i)
+            random.shuffle(nflTeams)
+            return nflTeams
 
         def homeOrAway():
-            number = int(random.random())
+            number = int(random.randint(1, 10))
             if number % 2 == 0:
                 homeOrAway = "Vs: "
             else:
                 homeOrAway = "At: "
             return homeOrAway
+        
+        schedule_team = generateSchedule()
 
-        scheduleDict = {"item": homeOrAway() + generateSchedule()}
-        scheduleDict_json = json.dumps(scheduleDict) # Schedule to json object
+        x = 1
+        schedule = []
+        for team in schedule_team:
+            scheduleDict={}
+            homeAway = homeOrAway()
+            scheduleDict['id'] = str(x)
+            scheduleDict["item"] = homeAway + team[1]
+            schedule.append(scheduleDict)
+            x += 1
 
         return {
             'teamItems': [
@@ -807,9 +819,7 @@ class TeamOutput(Resource):
                {'id': '37', "item": "Team Rating: " + str(rateAdding) + "/120"},
                {'id': '38', "item": teamResponse}
             ],
-            'schedule': [
-                scheduleDict_json
-            ]
+            'schedule': schedule
         }
     
 api.add_resource(TeamOutput, '/')
