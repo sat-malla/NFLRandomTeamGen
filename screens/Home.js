@@ -174,6 +174,7 @@ const Home = ({ navigation }) => {
               fontSize: 25,
               fontWeight: "bold",
               alignSelf: "center",
+              marginLeft: 10,
               color: colors.text,
             }}
           >

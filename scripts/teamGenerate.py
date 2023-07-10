@@ -741,14 +741,6 @@ class TeamOutput(Resource):
 
         #Generate randomly generated team's schedule
         def generateSchedule():
-            # for x in team:
-            #     _team = x.split()
-            #     index = _team[len(_team) - 1]
-            #     if index in list(list(zip(*nflTeams))[0]):
-            #         nflTeams.remove(nflTeams.index(list(list(zip(*nflTeams)))))
-            #         index -= 1
-            # schedule = random.shuffle(nflTeams)
-            # return schedule
             for x in team:
                 _team = x.split()
                 index = _team[len(_team) - 1]
@@ -761,9 +753,9 @@ class TeamOutput(Resource):
         def homeOrAway():
             number = int(random.randint(1, 10))
             if number % 2 == 0:
-                homeOrAway = "Vs: "
+                homeOrAway = "Vs "
             else:
-                homeOrAway = "At: "
+                homeOrAway = "At "
             return homeOrAway
         
         schedule_team = generateSchedule()
@@ -774,7 +766,7 @@ class TeamOutput(Resource):
             scheduleDict={}
             homeAway = homeOrAway()
             scheduleDict['id'] = str(x)
-            scheduleDict["item"] = homeAway + team[1]
+            scheduleDict["item"] = "Week " + str(x) + ": " + homeAway + team[1]
             schedule.append(scheduleDict)
             x += 1
 
