@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Info from "./screens/Info";
+import Analytics from "./screens/Analytics";
 import {
   ThemeProvider,
   useTheme,
@@ -37,6 +38,14 @@ function InfoTitle({ navigation }) {
   );
 }
 
+function AnalyticsTitle({ navigation }) {
+  return (
+    <Text style={{ fontSize: 23, color: "white", fontWeight: 500 }}>
+      Team Analytics
+    </Text>
+  );
+}
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -57,6 +66,15 @@ export default function App() {
             options={({ navigation }) => {
               return {
                 headerTitle: () => <InfoTitle navigation={navigation} />,
+              };
+            }}
+          />
+          <Stack.Screen
+            name="Analytics"
+            component={Analytics}
+            options={({ navigation }) => {
+              return {
+                headerTitle: () => <AnalyticsTitle navigation={navigation} />,
               };
             }}
           />

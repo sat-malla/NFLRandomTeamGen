@@ -18,6 +18,7 @@ const Home = ({ navigation }) => {
   const { dark, colors, setScheme } = useTheme();
   const [data, setData] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [rating, setRating] = useState();
   const [buttonPressed, isButtonPressed] = useState(false);
 
   const toggleTheme = () => {
@@ -28,6 +29,10 @@ const Home = ({ navigation }) => {
     try {
       const response = await fetch("http://127.0.0.1:5000/");
       const json = await response.json();
+      const teamItems = json.teamItems;
+      const rating = teamItems.find(obj => obj.id === '37');
+      const ratingText = rating.item.slice(12);
+      setRating(ratingText);
       setData(json.teamItems);
       setSchedule(json.schedule);
       isButtonPressed(true);
@@ -39,6 +44,16 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     getMessage();
   }, []);
+
+  module.Store = {
+    Rating() {
+      return rating;
+    }
+  }
+  
+  if (global) {
+    global.Store = module.Store
+  }
 
   navigation.setOptions({
     headerLeft: () => (
@@ -155,7 +170,7 @@ const Home = ({ navigation }) => {
         onPress={() => isButtonPressed(false)}
       />
       {buttonPressed ? (
-        <View style={{ marginTop: 10, padding: 15 }}>
+        <View style={{ padding: 15 }}>
           <FlatList
             data={data}
             keyExtractor={({ id }) => id}
@@ -168,6 +183,12 @@ const Home = ({ navigation }) => {
                 {item.item}
               </Text>
             )}
+          />
+          <Button
+            title="Team Analytics"
+            color="blue"
+            accessibilityLabel="Team Analytics"
+            onPress={() => navigation.navigate("Analytics")}
           />
           <Text
             style={{

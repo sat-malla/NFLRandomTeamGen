@@ -700,21 +700,30 @@ class TeamOutput(Resource):
                                                     1] + randomNflLss[1]
         teamResponse = ''
         # Rating adjustments
-        if randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 1:
-            rateAdding -= 97
-            teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). Also, since your coach is bad, your rating decreases by 15."
-        elif (randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 2):
-            rateAdding -= 82
-            teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below)."
-        elif (randomNflStartQb[1] > 6 and rateAdding > 82 and randomNflCoaches[1] == 1):
+        if (randomNflStartQb[0] == "Patrick Mahomes - KC" or randomNflCoaches[0] == "Andy Reid - KC"):
+            rateAdding -= 60
+            teamResponse = "You got either Mahomes or Reid, since they are SB champions, you get +12"
+        elif randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 1:
             rateAdding -= 87
-            teamResponse = "Since your coach is bad, your rating decreased by 15."
+            teamResponse = "You got the QB Effect(Lose -5 to rating) because your QB is bad(has rating of 5 or below). Also, since your coach is bad, your rating decreases by 10."
+        elif (randomNflStartQb[1] > 8 and rateAdding > 82 and randomNflCoaches[0] == "Andy Reid - KC"):
+            rateAdding -= 62
+            teamResponse = "Your QB and coach is good, +10 to rating"
+        elif (randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 2):
+            rateAdding -= 77
+            teamResponse = "You got the QB Effect(Lose -5 to rating) because your QB is bad(has rating of 5 or below)."
+        elif (randomNflStartQb[1] > 6 and rateAdding > 82 and randomNflCoaches[1] == 1):
+            rateAdding -= 82
+            teamResponse = "Since your coach is bad, your rating decreased by 10."
         elif randomNflStartQb[1] < 6 and rateAdding < 82 and randomNflCoaches[1] == 1:
             rateAdding = 0
-            teamResponse = "You got the QB Effect(Lose -10 to rating) because your QB is bad(has rating of 5 or below). And also since your coach is bad, your rating decreased by 15. But, since you have a really low rated team, your rating will be set to 0 instead of negative rating. Negative rating would just be too brutal, wouldn't it?"
+            teamResponse = "You got the QB Effect(Lose -5 to rating) because your QB is bad(has rating of 5 or below). And also since your coach is bad, your rating decreased by 10. But, since you have a really low rated team, your rating will be set to 0 instead of negative rating. Negative rating would just be too brutal, wouldn't it?"
         elif (randomNflCoaches[1] == 2 and rateAdding > 192):
             rateAdding = 120
             teamResponse = "Your coach is good, so your rating increases by 5. Your rating was higher than 120 because of the coach effect, but the rating should always 120 or lower because then it would be a bit unfair don't you think?"
+        elif (randomNflStartQb[1] > 8 and rateAdding > 82):
+            rateAdding -= 67
+            teamResponse = "Your QB is good, +5 to rating"
         else:
             rateAdding -= 72
             teamResponse = "Your team has no effects."
@@ -770,6 +779,57 @@ class TeamOutput(Resource):
             schedule.append(scheduleDict)
             x += 1
 
+        def ceilingFloor():
+            scheduleLength = len(schedule_team)
+            ceiling = ""
+            floor = ""
+            record = ""
+            if (rateAdding < 70):
+                wins = random.randint(0, int(scheduleLength/5))
+                ceiling += "Ceiling: " + str(int(scheduleLength/5)) + "-" + str(scheduleLength-int(scheduleLength/5))
+                floor += "Floor: 0-" + str(scheduleLength)
+                record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
+            elif (rateAdding > 70 and rateAdding < 80):
+                wins = random.randint(int(scheduleLength/5), int(scheduleLength/2))
+                ceiling += "Ceiling: " + str(int(scheduleLength/2)) + "-" + str(scheduleLength-int(scheduleLength/2))
+                floor += "Floor: " + str(int(scheduleLength/5)) + "-" + str(scheduleLength-int(scheduleLength/5))
+                record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
+            elif (rateAdding > 80 and rateAdding < 90):
+                wins = random.randint(int(scheduleLength/2), int(scheduleLength/1.7))
+                ceiling += "Ceiling: " + str(int(scheduleLength/1.7)) + "-" + str(scheduleLength-int(scheduleLength/1.7))
+                floor += "Floor: " + str(int(scheduleLength/2)) + "-" + str(scheduleLength-int(scheduleLength/2))
+                record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
+            elif (rateAdding > 90 and rateAdding < 100):
+                wins = random.randint(int(scheduleLength/1.7), int(scheduleLength/1.5))
+                ceiling += "Ceiling: " + str(int(scheduleLength/1.5)) + "-" + str(scheduleLength-int(scheduleLength/1.5))
+                floor += "Floor: " + str(int(scheduleLength/1.7)) + "-" + str(scheduleLength-int(scheduleLength/1.7))
+                record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
+            elif (rateAdding > 100 and rateAdding < 110):
+                wins = random.randint(int(scheduleLength/1.5), int(scheduleLength/1.1))
+                ceiling += "Ceiling: " + str(int(scheduleLength/1.1)) + "-" + str(scheduleLength-int(scheduleLength/1.1))
+                floor += "Floor: " + str(int(scheduleLength/1.5)) + "-" + str(scheduleLength-int(scheduleLength/1.5))
+                record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
+            elif (rateAdding > 110 and rateAdding <= 120):
+                wins = random.randint(int(scheduleLength/1.1), int(scheduleLength))
+                ceiling += "Ceiling: " + str(int(scheduleLength)) + "-" + str(scheduleLength-int(scheduleLength))
+                floor += "Floor: " + str(int(scheduleLength/1.1)) + "-" + str(scheduleLength-int(scheduleLength/1.1))
+                record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
+            ceilingFloor = [ceiling, floor, record]
+            return ceilingFloor
+
+        teamRecord = ceilingFloor() 
+
+        y=1
+        finalTeamRecord=[]
+        for x in teamRecord:
+            recordDict={}
+            recordDict['id'] = str(y)
+            recordDict["item"] = x
+            finalTeamRecord.append(recordDict)
+            y+=1
+
+
+
         return {
             'teamItems': [
                {'id': '1', 'item': "Team Name: " + _randomNflCities + " " + _randomNflTeamNames},
@@ -811,7 +871,8 @@ class TeamOutput(Resource):
                {'id': '37', "item": "Team Rating: " + str(rateAdding) + "/120"},
                {'id': '38', "item": teamResponse}
             ],
-            'schedule': schedule
+            'schedule': schedule,
+            'record': finalTeamRecord
         }
     
 api.add_resource(TeamOutput, '/')
