@@ -850,7 +850,7 @@ class TeamOutput(Resource):
             else:
                 playoffChance += 99.9
             sbChances = playoffChance / 4
-            playoffChances = ["Chance to make playoffs: " + str(playoffChance) + "%", "Chance to win Superbowl: " + str(sbChances) + "%"]
+            playoffChances = ["Chance to make playoffs: " + str(playoffChance) + "%", "Chance to win Super Bowl: " + str(sbChances) + "%"]
             return playoffChances
 
         pChances = playoffChances()

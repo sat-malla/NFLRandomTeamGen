@@ -35,7 +35,7 @@ const Analytics = () => {
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
           renderItem={({ item }) => (
-            <Text style={{ fontSize: 12, color: colors.text }}>
+            <Text style={{ fontSize: 11, color: colors.text, fontWeight: "500" }}>
               {item.item}
             </Text>
           )}
@@ -99,7 +99,7 @@ const Analytics = () => {
           renderItem={({ item }) => (
             <View
               style={{
-                backgroundColor: "white",
+                backgroundColor: "#e0ecff",
                 borderColor: "blue",
                 borderTopWidth: 30,
                 borderWidth: 2,
@@ -133,7 +133,7 @@ const Analytics = () => {
                 {item.text}
               </Text>
               <Text style={{
-                marginTop: -18,
+                marginTop: -15,
               }}> 
                 {item.component}
               </Text>
@@ -148,7 +148,7 @@ const Analytics = () => {
           renderItem={({ item }) => (
             <View
               style={{
-                backgroundColor: "white",
+                backgroundColor: "#e0ecff",
                 borderColor: "blue",
                 borderTopWidth: 30,
                 borderWidth: 2,
