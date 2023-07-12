@@ -18,7 +18,9 @@ const Home = ({ navigation }) => {
   const { dark, colors, setScheme } = useTheme();
   const [data, setData] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [record, setRecord] = useState([]);
   const [rating, setRating] = useState();
+  const [pChances, setPChances] = useState([]);
   const [buttonPressed, isButtonPressed] = useState(false);
 
   const toggleTheme = () => {
@@ -35,6 +37,8 @@ const Home = ({ navigation }) => {
       setRating(ratingText);
       setData(json.teamItems);
       setSchedule(json.schedule);
+      setRecord(json.record);
+      setPChances(json.pChances)
       isButtonPressed(true);
     } catch (error) {
       Alert.alert(error);
@@ -48,6 +52,12 @@ const Home = ({ navigation }) => {
   module.Store = {
     Rating() {
       return rating;
+    },
+    Record() {
+      return record;
+    },
+    PChances() {
+      return pChances;
     }
   }
   

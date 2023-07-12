@@ -712,6 +712,9 @@ class TeamOutput(Resource):
         elif (randomNflStartQb[1] < 6 and rateAdding > 82 and randomNflCoaches[1] == 2):
             rateAdding -= 77
             teamResponse = "You got the QB Effect(Lose -5 to rating) because your QB is bad(has rating of 5 or below)."
+        elif (randomNflStartQb[1] > 8 and rateAdding > 82):
+            rateAdding -= 67
+            teamResponse = "Your QB is good, +5 to rating"
         elif (randomNflStartQb[1] > 6 and rateAdding > 82 and randomNflCoaches[1] == 1):
             rateAdding -= 82
             teamResponse = "Since your coach is bad, your rating decreased by 10."
@@ -721,9 +724,6 @@ class TeamOutput(Resource):
         elif (randomNflCoaches[1] == 2 and rateAdding > 192):
             rateAdding = 120
             teamResponse = "Your coach is good, so your rating increases by 5. Your rating was higher than 120 because of the coach effect, but the rating should always 120 or lower because then it would be a bit unfair don't you think?"
-        elif (randomNflStartQb[1] > 8 and rateAdding > 82):
-            rateAdding -= 67
-            teamResponse = "Your QB is good, +5 to rating"
         else:
             rateAdding -= 72
             teamResponse = "Your team has no effects."
@@ -779,6 +779,7 @@ class TeamOutput(Resource):
             schedule.append(scheduleDict)
             x += 1
 
+        # Determing team's ceiling, floor, and predicted record
         def ceilingFloor():
             scheduleLength = len(schedule_team)
             ceiling = ""
@@ -815,19 +816,53 @@ class TeamOutput(Resource):
                 floor += "Floor: " + str(int(scheduleLength/1.1)) + "-" + str(scheduleLength-int(scheduleLength/1.1))
                 record += "Predicted Record: " + str(wins) + "-" + str(scheduleLength-wins)
             ceilingFloor = [ceiling, floor, record]
-            return ceilingFloor
+            items = [ceilingFloor, wins]
+            return items
 
         teamRecord = ceilingFloor() 
 
         y=1
         finalTeamRecord=[]
-        for x in teamRecord:
+        for record in teamRecord[0]:
             recordDict={}
             recordDict['id'] = str(y)
-            recordDict["item"] = x
+            recordDict["item"] = record
             finalTeamRecord.append(recordDict)
             y+=1
 
+        # Determining team's playoff chances
+        def playoffChances():
+            playoffChance = 0
+            sbChances = 0
+            winsRecord = ceilingFloor()
+            totalGames = len(schedule_team)
+            winRate = (winsRecord[1] / totalGames) * 100
+            if (winRate >= 0.0 and winRate < 20.0):
+                playoffChance += round(random.uniform(0.0, 20.0), 1)
+            elif (winRate >= 20.0 and winRate < 40.0):
+                playoffChance += round(random.uniform(20.0, 40.0), 1)
+            elif (winRate >= 40.0 and winRate < 60.0):
+                playoffChance += round(random.uniform(40.0, 60.0), 1)
+            elif (winRate >= 60.0 and winRate < 80.0):
+                playoffChance += round(random.uniform(60.0, 80.0), 1)
+            elif (winRate >= 80.0 and winRate < 100.0):
+                playoffChance += round(random.uniform(80.0, 99.0), 1)
+            else:
+                playoffChance += 99.9
+            sbChances = playoffChance / 4
+            playoffChances = ["Chance to make playoffs: " + str(playoffChance) + "%", "Chance to win Superbowl: " + str(sbChances) + "%"]
+            return playoffChances
+
+        pChances = playoffChances()
+        z=1
+        finalPlayoffChances=[]
+        for chance in pChances:
+            playoffDict={}
+            playoffDict['id'] = str(z)
+            playoffDict['item'] = chance
+            finalPlayoffChances.append(playoffDict)
+            z+=1
+        
 
 
         return {
@@ -872,7 +907,8 @@ class TeamOutput(Resource):
                {'id': '38', "item": teamResponse}
             ],
             'schedule': schedule,
-            'record': finalTeamRecord
+            'record': finalTeamRecord,
+            'pChances': finalPlayoffChances
         }
     
 api.add_resource(TeamOutput, '/')

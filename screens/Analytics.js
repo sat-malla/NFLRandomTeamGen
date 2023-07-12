@@ -4,13 +4,11 @@ import { useTheme } from "../DarkTheme/ThemeProvider.js";
 
 const Analytics = () => {
   const { colors } = useTheme();
-  const [record, setRecord] = useState([]);
 
   const getAnalytics = async () => {
     try {
       const response = await fetch("http://127.0.0.1:5000/");
       const json = await response.json();
-      setRecord(json.record);
     } catch (error) {
       Alert.alert(error);
     }
@@ -29,6 +27,20 @@ const Analytics = () => {
     {
       id: "2",
       title: "Playoff Chances",
+      component: (
+        <FlatList
+          data={Store.PChances()}
+          scrollEnabled={false}
+          contentContainerStyle={{ justifyContent: "center" }}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+          renderItem={({ item }) => (
+            <Text style={{ fontSize: 12, color: colors.text }}>
+              {item.item}
+            </Text>
+          )}
+        />
+      ),
     },
   ];
 
@@ -38,7 +50,7 @@ const Analytics = () => {
       title: "Team Record",
       component: (
         <FlatList
-          data={record}
+          data={Store.Record()}
           scrollEnabled={false}
           contentContainerStyle={{ justifyContent: "center" }}
           keyExtractor={(item) => item.id}
@@ -119,6 +131,11 @@ const Analytics = () => {
                 }}
               >
                 {item.text}
+              </Text>
+              <Text style={{
+                marginTop: -18,
+              }}> 
+                {item.component}
               </Text>
             </View>
           )}
